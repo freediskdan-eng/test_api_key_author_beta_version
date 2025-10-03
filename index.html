@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -2648,3 +2649,87 @@
     </script>
 </body>
 </html>
+=======
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой API Виджет</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        pre { background: #eee; padding: 15px; border-radius: 4px; overflow-x: auto; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+        .error-message { color: red; margin-top: 10px; }
+        #api-key-input { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Данные из моего Python API</h1>
+        
+        <p>
+            Введите API ключ. 
+            <span style="color: red; font-weight: bold;">ВНИМАНИЕ: Ввод API ключа на клиентской стороне крайне не рекомендуется для конфиденциальных данных! 
+            Этот подход подходит только для публичных, ограниченных по возможностям API ключей.</span>
+        </p>
+        <input type="text" id="api-key-input" placeholder="Введите ваш API ключ здесь">
+        <button onclick="fetchData()">Загрузить данные</button>
+        
+        <div id="data-display">
+            <p>Данные появятся здесь...</p>
+        </div>
+        <div class="error-message" id="error-display"></div>
+    </div>
+
+    <script>
+        // АДРЕС ТВОЕГО PYTHON API
+        const API_URL = 'https://my-flask-api-backend-danyl-1.onrender.com/data';
+
+
+        // Это функция, которая делает запрос к API
+        async function fetchData() {
+            const apiKey = document.getElementById('api-key-input').value;
+            const dataDisplay = document.getElementById('data-display');
+            const errorDisplay = document.getElementById('error-display');
+            
+            errorDisplay.textContent = ''; // Очищаем предыдущие ошибки
+            dataDisplay.innerHTML = '<p>Загрузка данных...</p>';
+
+            if (!apiKey) {
+                errorDisplay.textContent = 'Пожалуйста, введите API ключ.';
+                dataDisplay.innerHTML = '';
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'X-API-Key': apiKey, // Передаем API ключ в заголовке X-API-Key
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP ошибка! Статус: ${response.status}, Сообщение: ${errorData.message || response.statusText}`);
+                }
+
+                const data = await response.json();
+                dataDisplay.innerHTML = `
+                    <h2>Полученные данные:</h2>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error);
+                errorDisplay.textContent = `Не удалось получить данные: ${error.message}`;
+                dataDisplay.innerHTML = '';
+            }
+        }
+    </script>
+</body>
+</html>
+>>>>>>> e1cddeced88f505eb5eb3df46a2daf947ff8c18b
